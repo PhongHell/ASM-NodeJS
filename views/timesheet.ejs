@@ -1,0 +1,95 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        Thông tin giờ làm
+                    </h1>
+                    <hr>
+                    <div class="image">
+                        <img src="<%= staff.image %>" alt="<%= staff.name %>">
+                    </div>
+                    <p>Manager: <%= managerName %></p>
+                </div>
+                <div class="container">
+                    <div>
+
+                        <form class="product-form" action="/timesheet" method="POST">
+                            <div class="form-control">
+                                <label for="pageNum"><b>Chọn số record hiển thị trên 1 trang: </b></label>
+                                <select name="pageNum" id="pageNum">
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                            <div class="centered">
+                                <button class="btn" type="submit">Tìm</button>
+                            </div>
+                        </form>
+
+                        <div class="space-div"></div>
+
+                        <% if (noInfo) { %>
+                            <p class="centered"><i class="warning">Không có thông tin timesheet</i></p>
+                            <% } else { %>
+                                <div></div>
+                                <% } %>
+
+                                    <% timesheet.forEach(t=> { %>
+                                        <div class="card">
+
+                                            <span class="timesheet-span">Ngày làm việc: <%= t._id.slice(0,10) %></span>
+                                            <span class="timesheet-span">Tổng số giờ làm: <%= t.totalHours %></span>
+                                            <span class="timesheet-span">Overtime: <%= t.overTime %></span>
+
+                                            <hr>
+                                            <p>Các phiên điểm danh: </p>
+                                            <ul class="checkin-info-list">
+                                                <% t.checkin.forEach(checkin=> { %>
+                                                    <li>
+                                                        <span>Bắt đầu:
+                                                            <%= checkin.start.getHours() %>:<%=
+                                                                    (checkin.start.getMinutes()<10?'0':'') +
+                                                                    checkin.start.getMinutes() %>
+                                                        </span>
+                                                        <span>Kết thúc:
+                                                            <%= checkin.end.getHours() %>:<%=
+                                                                    (checkin.end.getMinutes()<10?'0':'') +
+                                                                    checkin.end.getMinutes() %>
+                                                        </span>
+                                                        <span>Nơi làm việc:
+                                                            <%= checkin.workplace==='home' ? 'Nhà' :
+                                                                checkin.workplace==='customer_company' ? 'Khách hàng'
+                                                                : 'Công ty' %>
+                                                        </span>
+                                                    </li>
+                                                    <% }) %>
+                                            </ul>
+                                        </div>
+                                        <% }) %>
+
+                                        <%- include('./includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+                    </div>
+                </div>
+
+                <div class="space-div"></div>
+
+                <div class="centered">
+                    <b>Xem lương tháng</b>
+                    <% for (const [key, value] of Object.entries(months)) { %>
+                        <a href="/salary/<%= key %>">
+                            <%= key %>
+                        </a>
+                        <span>,</span>
+                        <% } %>
+                </div>
+
+            </main>
+
+            <%- include('./includes/end.ejs') %>
