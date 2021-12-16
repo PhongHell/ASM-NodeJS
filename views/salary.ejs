@@ -1,0 +1,39 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        Lương tháng <%= month %>
+                    </h1>
+                    <hr>
+                    <div class="image">
+                        <img src="/<%= staff.image %>" alt="<%= staff.name %>">
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div>
+                        <p>Tổng số giờ làm thêm: <%= overTime %>
+                        </p>
+                        <p>Số giờ làm chưa đủ: <%= underTime %>
+                        </p>
+                        <p>Hệ số lương: <%= staff.salaryScale %>
+                        </p>
+                        <p>Lương: <b>
+                                <%= (staff.salaryScale * 3000000 + (overTime/8 - underTime/8) * 200000).toLocaleString() > 0 ? 3000.000 : 
+                                (staff.salaryScale * 3000000 + (overTime/8 - underTime/8) * 200000).toLocaleString()
+                                    %>
+                            </b> VND</p>
+                        <hr>
+                        <p><i>Công thức tính lương: </i></p>
+                        <p><i>salaryScale * 3000000 + (overTime - số giờ làm thiếu) * 200000</i></p>
+                    </div>
+                </div>
+
+            </main>
+            <%- include('./includes/end.ejs') %>

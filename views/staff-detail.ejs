@@ -1,0 +1,45 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        <span>
+                            <%= staff.name %>
+                        </span>
+                    </h1>
+                </div>
+                <div class="container">
+                    <div class="card-staff">
+                        <div class="image">
+                            <img src="/<%= staff.image %>" alt="<%= staff.name %>">
+                        </div>
+                        <div>
+                            <p class="card-staff-info">ID: <%= staff._id.toString().toUpperCase().slice(0,6) %>
+                            </p>
+                            <p class="card-staff-info">Chức vụ : <%= staff.manager === true ? 'Quản lý' : 'Nhân viên' %>
+                            </p>
+                            <p class="card-staff-info">Ngày sinh: <%= staff.doB.toISOString().slice(0,10).split('-').reverse().join('/') %>
+                            </p>
+                            <p class="card-staff-info">Hệ số lương: <%= staff.salaryScale %>
+                            </p>
+                            <p class="card-staff-info">Ngày bắt đầu làm việc: <%=
+                                    staff.startDate.toISOString().slice(0,10).split('-').reverse().join('/') %>
+                            </p>
+                            <p class="card-staff-info">Bộ phận: <%= staff.department %>
+                            </p>
+                            <p class="card-staff-info">Số ngày nghỉ còn lại: <%= Math.round((staff.annualLeave/8) * 100)
+                                    / 100 %> ngày</p>
+
+                            <div class="centered card-staff-a">
+                                <a href="/edit-staff/<%= staff._id %>" class="btn">Update</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            <%- include('./includes/end.ejs') %>

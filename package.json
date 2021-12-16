@@ -1,0 +1,40 @@
+{
+  "name": "node-module_lab_njs",
+  "version": "1.0.0",
+  "description": "node_module_lab",
+  "main": "app.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "bson": "^4.6.0",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^3.1.1",
+    "csurf": "^1.11.0",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.13.0",
+    "moment-business-days": "^1.2.0",
+    "momentjs": "^2.0.0",
+    "mongodb": "^4.2.0",
+    "mongoose": "^6.0.13",
+    "mssql": "^7.3.0",
+    "multer": "^1.4.3",
+    "mysql2": "^2.3.3",
+    "nodemailer": "^6.7.2",
+    "nodemailer-sendgrid-transport": "^0.2.0",
+    "nodemon": "^1.18.3",
+    "pdfkit": "^0.13.0",
+    "pug": "^3.0.2",
+    "sequelize": "^6.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,33 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+    <%- include('./includes/navigation.ejs') %>
+
+    <main>
+        <% if (employees.length > 0) { %>
+            <div class="grid">
+                <% for (let employee of employees) { %>
+                    <article class="card product-item card-1">
+                        <header class="card__header">
+                            <h1 class="product__title"><%= employee.name %></h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="/<%= employee.image %>"
+                                alt="<%= employee.name %>">
+                        </div>
+                        <div class="card__content">
+                            <h2 class="product__price"><%= employee.name %></h2>
+                        </div>
+                        <div class="card__actions">
+                            <a href="/employeeVaccine/<%= employee._id %>" class="btn">Chi tiết</a>
+                        </div>
+                    </article>
+                <% } %>
+            </div>
+        <% } else { %>
+            <h1>No Employee Found!</h1>
+        <% } %>
+    </main>
+<%- include('./includes/end.ejs') %>

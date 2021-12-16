@@ -1,0 +1,115 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        Điểm danh : <%= staff.name%>
+                    </h1>
+                    <hr>
+                    <div class="image">
+                        <img src="/<%= staff.image %>" alt="<%= staff.name %>">
+                    </div>
+                </div>
+
+                <% if (noTimesheet==='true' ) { %>
+                    <p class="centered"><i class="warning"> Không có thông tin timesheet </i></p>
+                    <% } %>
+
+                    <% if (confirmed==='true' ) { %>
+                        <p class="centered"><i class="warning"> Thời gian làm việc của tháng đã được xác nhận  </i></p>
+                        <% } %>
+                
+                            <% if (!isCheckedIn) { %>
+                                <form class="product-form" action="/" method="POST">
+                                    <div class="form-control">
+                                        <label for="workplace"><b>Chọn địa điểm làm việc: </b></label>
+                                        <select name="workplace" id="workplace">
+                                            <option value="home">Nhà</option>
+                                            <option value="company">Công ty</option>
+                                            <option value="customer_company">Khách hàng</option>
+                                        </select>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <div>
+                                        <button class="btn" type="submit">Điểm danh</button>
+                                    </div>
+                                </form>
+                                <% } else { %>
+                                    <div class="container">
+                                        <div>
+                                            <p>Phiên làm việc: </p>
+                                            <p>Bắt đầu: <%= checkin.start.toISOString().slice(0,10) %>, <%=
+                                                        checkin.start.getHours() %>:<%=
+                                                            (checkin.start.getMinutes()<10?'0':'') +
+                                                            checkin.start.getMinutes() %>
+                                            </p>
+                                            <p>Địa điểm: <%= checkin.workplace==='home' ? 'Nhà' :
+                                                    checkin.workplace==='customer_company' ? 'Khách hàng' : 'Công ty' %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <form class="product-form" action="/" method="POST">
+                                        <input type="hidden" value="checkout" name="checkout">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        <div class="centered">
+                                            <button class="btn" type="submit">Kết thúc</button>
+                                        </div>
+                                    </form>
+                                    <% } %>
+
+                                        <div class="space-div"></div>
+
+                                        <form class="product-form" action="/dayoff" method="POST">
+                                            <b class="form-title">Đăng ký ngày nghỉ</b>
+                                            <p>
+                                                <i>Số ngày nghỉ còn lại: <%= Math.round((staff.annualLeave/8) * 100) /
+                                                        100 %>
+                                                </i>
+                                            </p>
+                                            <div class="form-control">
+                                                <label for="dayoff">
+                                                    Chọn ngày nghỉ: </label>
+                                                <input type="date" name="dayoff" id="dayoff">
+                                            </div>
+                                            <div class="form-control">
+                                                <label for="houroff">
+                                                    Chọn số giờ nghỉ </label>
+                                                <input type="string" name="houroff" id="houroff" max="8">
+                                            </div>
+                                            <div class="form-control">
+                                                <label for="reason">
+                                                    Lý do nghỉ </label>
+                                                <textarea name="reason" id="reason"></textarea>
+                                            </div>
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <button class="btn" type="submit">Xin nghỉ</button>
+                                        </form>
+
+                                        <% if (cannot==='true' ) { %>
+                                            <p class="centered"><i class="warning"> Không đăng ký được vì số giờ xin nghỉ đã
+                                                    quá 8 giờ </i></p>
+                                            <% } %>
+
+                                                    <% if (holiday==='true' ) { %>
+                                                        <p class="centered"><i class="warning"> Không đăng ký được vào
+                                                                ngày nghỉ </i></p>
+                                                        <% } %>
+
+                                                                <% if (overLeave==='true' ) { %>
+                                                                    <p class="centered"><i class="warning"> Không đăng
+                                                                            ký được vì quá số ngày nghỉ
+                                                                            quy định </i></p>
+                                                                    <% } %>
+                                                                            <% if (passDate==='true' ) { %>
+                                                                                <p class="centered"><i class="warning"> Không đăng
+                                                                                        ký được ngày đã qua
+                                                                                        quy định </i></p>
+                                                                                <% } %>
+                                                                    
+            </main>
+            <%- include('./includes/end.ejs') %>

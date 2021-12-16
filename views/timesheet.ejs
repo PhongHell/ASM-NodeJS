@@ -1,0 +1,109 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('includes/navigation.ejs') %>
+            <main>
+                <input type="hidden" value="<%= pageNum %> " name="pageCount">
+                <div class="centered">
+                    <h1>
+                        Thông tin giờ làm : <%= staff.name %> 
+                    </h1>
+                    <hr>
+                        <div class="image">
+                            <img src="<%= staff.image %>" alt="<%= staff.name %>">
+                        </div>
+                    <% if (managerName) { %>
+                        <p> 
+                            <b> Chức vụ : Nhân viên  </b>
+                        </p>
+                        <p>Người quản lý:<%= managerName %>  </p>
+                    <% } else {%>
+                        <p> <b> Chức vụ : Quản lý  </b> </p>
+                    <hr>
+                  
+                    <% }%>
+                </div>
+                <div class="container">
+                    <div>
+                        <form class="product-form" action="/timesheet" method="POST">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <div class="form-control centered" >
+                               
+                            <input name="pageNum" id="pageNum" class="centered" value="<%= pageNum %>" width="20%">
+                            </div>
+                            <div class="centered">
+                                <button class="btn " type="submit">Chọn số bản ghi muốn hiển thị</button>
+                            </div>
+                        </form>
+
+                        <div class="space-div"></div>
+
+                        <% if (noInfo) { %>
+                            <p class="centered"><i class="warning">Không có thông tin thời gian biểu</i></p>
+                            <% } else { %>
+                                <div></div>
+                                <% } %>
+
+                                    <% timesheet.forEach(t=> { %>
+                                        <div class="card">
+
+                                            <span class="timesheet-span">Ngày làm việc: <%= t._id.slice(0,10).split('-').reverse().join('/') %></span>
+                                            <span class="timesheet-span">Tổng số giờ làm: <%= t.totalHours %></span>
+                                            <span class="timesheet-span">Overtime: <%= t.overTime %></span>
+
+                                            <hr>
+                                            <p>Số lần điểm danh: <%= t.checkin.length %></p>
+                                            <ul class="checkin-info-list">
+                                                <% t.checkin.forEach(checkin=> { %>
+                                                    <li>
+                                                        <span>Bắt đầu:
+                                                            <%= checkin.start.getHours() %>:<%=
+                                                                    (checkin.start.getMinutes()< 10?'0':'') +
+                                                                    checkin.start.getMinutes() %>
+                                                        </span>
+                                                        <span>Kết thúc:
+                                                            <%= checkin.end.getHours() %>:<%=
+                                                                    (checkin.end.getMinutes()< 10?'0':'') +
+                                                                    checkin.end.getMinutes() %>
+                                                        </span>
+                                                        <span>Nơi làm việc:
+                                                            <%= checkin.workplace==='home' ? 'Nhà' :
+                                                                checkin.workplace==='customer_company' ? 'Khách hàng'
+                                                                : 'Công ty' %>
+                                                        </span>
+                                                    </li>
+                                                    <% }) %>
+                                            </ul>
+                                        </div>
+                                        <% }) %>
+
+                                        <%- include('./includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage, pageNum : pageNum}) %>
+                    </div>
+                </div>
+
+                <div class="space-div"></div>
+                <hr>
+                <% if (isManager) { %>  
+                    <div class="centered">        
+                    <a class="btn" href="/employeeTimesheet">
+                        <b> Thông tin giờ làm của nhân viên </b> 
+                    </a>     
+                </div> 
+                <hr>                   
+                <% } %>
+                <div class="centered">  
+                    <b>Xem lương tháng</b>
+                    <% for (const [key, value] of Object.entries(months)) { %>
+                        <a href="/salary/<%= key %>" class="btn">
+                            <%= key %>
+                        </a>
+                        <span>,</span>
+                        <% } %>
+                </div>
+
+            </main>
+
+            <%- include('./includes/end.ejs') %>

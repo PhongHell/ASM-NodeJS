@@ -1,0 +1,57 @@
+<%- include('./includes/head.ejs') %>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        Thông tin covid cua <span><%= staff.name %></span>
+                    </h1>
+                    <hr>
+                    <div class="image">
+                        <img src="/<%= staff.image %>" alt="<%= staff.name %>">
+                    </div>
+                    <div style="height: 0.1em;"></div>
+                    <div>
+                        <a href="/employeeVaccine/pdf/<%= staff._id %> " class="btn">Xuất PDF</a>
+                    </div>
+                </div>
+                <form class="product-form" action="/vaccine" method="POST">
+                    <div class="form-control">
+                        <label for="temp"><b>Nhiệt độ: </b></label>
+                        <input type="number" name="tem" id="tem" step="0.1" value="<% if (staff.covid.tem) { %><%= staff.covid.tem %><% } else { %><% } %>">
+                    </div>
+                    <div class="form-control">
+                        <label for="result"><b>Kết quả xét nghiệm covid: </b></label>
+                        <select name="result" id="result">
+                            <option value="yes" <%= staff.covid.result === 'yes' ? 'selected' : ''%>>Dương tính</option>
+                            <option value="no" <%= staff.covid.result === 'no' ? 'selected' : ''%>>Âm tính</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label for="shot1"><b>Loại vaccine mũi 1: </b></label>
+                        <input type="text" name="shot1" id="shot1" value="<% if (staff.covid.vaccine[0]) { %><%= staff.covid.vaccine[0]['shot'] %><% } else { %><% } %>">
+                    </div>
+                    <div class="form-control">
+                        <label for="date1"><b>Ngày tiêm mũi 1: </b></label>
+                        <input type="date" name="date1" id="date1" value="<% if (staff.covid.vaccine[0]) { %><%= staff.covid.vaccine[0]['date'].toISOString().slice(0,10) %><% } else { %><% } %>">
+                    </div>
+                    <div class="form-control">
+                        <label for="shot2"><b>Loại vaccine mũi 2: </b></label>
+                        <input type="text" name="shot2" id="shot2" value="<% if (staff.covid.vaccine[1]) { %><%= staff.covid.vaccine[1]['shot'] %><% } else { %><% } %>">
+                    </div>
+                    <div class="form-control">
+                        <label for="date2"><b>Ngày tiêm mũi 2: </b></label>
+                        <input type="date" name="date2" id="date2" value="<% if (staff.covid.vaccine[1]) { %><%= staff.covid.vaccine[1]['date'].toISOString().slice(0,10) %><% } else { %><% } %>">
+                    </div>
+                   
+                </form>
+            </main>
+
+
+            <%- include('./includes/end.ejs') %>

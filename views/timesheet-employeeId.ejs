@@ -1,0 +1,113 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/forms.css">
+    </head>
+
+    <body>
+        <%- include('includes/navigation.ejs') %>
+            <main>
+                <div class="centered">
+                    <h1>
+                        Thông tin giờ làm
+                    </h1>
+                    <hr>
+                    <div class="image">
+                        <img src="/<%= staff.image %>" alt="<%= staff.name %>">
+                    </div>
+                    <p>Manager: <%= managerName %>
+                    </p>
+                </div>
+
+                <div class="centered">
+                    <b>Chọn tháng</b>
+
+
+                    <form action="/employeeTimesheet/month" method="POST">
+                        <select name="month" id="month">
+                            <% months.forEach(m => { %>
+                                <option value="<%= m %>"><%= m %></option>
+                            <% }) %>
+                        </select>
+                        <input type="hidden" name="staffId" value="<%= staff._id %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit">Xem</button>
+                    </form>
+
+                    <% if (!notMonth) { %> 
+                        <form action="/employeeTimesheet/confirm" method="POST">
+                            <input type="hidden" name="staffId_confirm" value="<%= staff._id %>">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <input type="hidden" name="month_confirm" value="<%= month %>">
+                            <button type="submit">Xác nhận</button>
+                        </form>    
+                    <% } %>
+
+                </div>
+
+                <div class="container">
+                    <div>
+                        <div class="space-div"></div>
+
+                        <% if (noInfo) { %>
+                            <p class="centered"><i class="warning">Không có thông tin timesheet</i></p>
+                            <% } else { %>
+                                <div></div>
+                                <% } %>
+
+                                    <% timesheet.forEach(t=> { %>
+                                        <div class="card">
+
+                                            <span class="timesheet-span">Ngày làm việc: <%= t._id.slice(0,10) %></span>
+                                            <span class="timesheet-span">Tổng số giờ làm: <%= t.totalHours %></span>
+                                            <span class="timesheet-span">Overtime: <%= t.overTime %></span>
+
+                                            <hr>
+                                            <p>Các phiên điểm danh: </p>
+                                            <ul class="checkin-info-list">
+                                                <% t.checkin.forEach(checkin=> { %>
+                                                    <li>
+                                                        <span>Bắt đầu:
+                                                            <%= checkin.start.getHours() %>:<%=
+                                                                    (checkin.start.getMinutes()<10?'0':'') +
+                                                                    checkin.start.getMinutes() %>
+                                                        </span>
+                                                        <span>Kết thúc:
+                                                            <%= checkin.end.getHours() %>:<%=
+                                                                    (checkin.end.getMinutes()<10?'0':'') +
+                                                                    checkin.end.getMinutes() %>
+                                                        </span>
+                                                        <span>Nơi làm việc:
+                                                            <%= checkin.workplace==='home' ? 'Nhà' :
+                                                                checkin.workplace==='customer_company' ? 'Khách hàng'
+                                                                : 'Công ty' %>
+                                                        </span>
+                                                        <% if (!checkin.confirm) { %> 
+                                                            <form action="/employeeTimesheet/delete" method="POST">
+                                                                <input type="hidden" value="<%= checkin._id %>"
+                                                                    name="checkinId" />
+                                                                <input type="hidden" value="<%= staff._id %>"
+                                                                    name="employeeId" />
+                                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                                <button class="btn" type="submit">Delete</button>
+                                                            </form>
+                                                        <% } %>
+                                                    </li>
+                                                    <% }) %>
+                                            </ul>
+                                        </div>
+                                        <% }) %>
+
+                                        <% if (notMonth) { %>
+                                            <%- include('./includes/pagination.ejs', {currentPage: currentPage,
+                                                nextPage: nextPage, previousPage: previousPage, lastPage: lastPage,
+                                                hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
+                                         <% } %> 
+                    </div>
+                </div>
+
+                <div class="space-div"></div>
+
+
+            </main>
+
+            <%- include('./includes/end.ejs') %>

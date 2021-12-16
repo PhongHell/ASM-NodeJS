@@ -1,0 +1,43 @@
+<%- include('./includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+            <main>
+                <h1 class="centered">
+                    <%= staff.name %>
+                </h1>
+                <hr>
+                <div class="container">
+                    <div>
+                        <p>
+                            Ngày sinh: <%= staff.doB.toISOString().slice(0,10) %>
+                        </p>
+                        <p>
+                            Hệ số lương: <%= staff.salaryScale %>
+                        </p>
+                        <p>
+                            Ngày bắt đầu: <%= staff.startDate.toISOString().slice(0,10) %>
+                        </p>
+                        <p>
+                            Bộ phận: <%= staff.department %>
+                        </p>
+                        <p>
+                            Số ngày nghỉ còn lại: <%= Math.round(staff.annualLeave/8 * 100) / 100 %> ngày
+                        </p>
+                    </div>
+                </div>
+                <form class="product-form" action="/edit-staff" method="POST" enctype="multipart/form-data">
+                    <div class="form-control">
+                        <label for="image">Image</label>
+                        <input type="file" name="image" id="image">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="staffId" value="<%= staff._id %>">
+                    </div>
+                    <button class="btn" type="submit">Update</button>
+                </form>
+            </main>
+
+            <%- include('./includes/end.ejs') %>
